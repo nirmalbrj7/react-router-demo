@@ -1,70 +1,235 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# React Navigation App
 
-## Available Scripts
+This is a simple React application with three pages: Home, About, and Contact. It uses React Router for navigation and tracks the number of visits to the Home page using React hooks. The navigation menu is displayed vertically on the left side.
 
-In the project directory, you can run:
+## Project Setup
 
-### `npm start`
+### Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Ensure you have the following installed:
+- Node.js
+- npm (Node Package Manager)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Installation
 
-### `npm test`
+1. **Clone the repository:**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   ```bash
+   git clone <repository-url>
+   cd my-react-app
+   ```
 
-### `npm run build`
+2. **Install dependencies:**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   ```bash
+   npm install
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. **Start the development server:**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   ```bash
+   npm start
+   ```
 
-### `npm run eject`
+## Project Structure
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+The project structure is as follows:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+react-router-demo/
+├── node_modules/
+├── public/
+├── src/
+│   ├── pages/
+│   │   ├── Home.js
+│   │   ├── About.js
+│   │   ├── Contact.js
+│   ├── App.js
+│   ├── App.css
+│   ├── index.js
+├── .gitignore
+├── package.json
+├── README.md
+└── yarn.lock
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Code Overview
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+#### `src/pages/Home.js`
 
-## Learn More
+```jsx
+import React, { useEffect } from 'react';
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+const Home = ({ visits, setVisits }) => {
+  useEffect(() => {
+    setVisits(prev => prev + 1);
+  }, [setVisits]);
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  return (
+    <div>
+      <h1>Home Page</h1>
+      <p>Welcome to the Home Page.</p>
+      <p>Home page visited {visits} times.</p>
+    </div>
+  );
+};
 
-### Code Splitting
+export default Home;
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+#### `src/pages/About.js`
 
-### Analyzing the Bundle Size
+```jsx
+import React from 'react';
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+const About = () => {
+  return (
+    <div>
+      <h1>About Page</h1>
+      <p>Welcome to the About Page.</p>
+    </div>
+  );
+};
 
-### Making a Progressive Web App
+export default About;
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+#### `src/pages/Contact.js`
 
-### Advanced Configuration
+```jsx
+import React from 'react';
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+const Contact = () => {
+  return (
+    <div>
+      <h1>Contact Page</h1>
+      <p>Welcome to the Contact Page.</p>
+    </div>
+  );
+};
 
-### Deployment
+export default Contact;
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+#### `src/App.js`
 
-### `npm run build` fails to minify
+```jsx
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import './App.css';
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+const App = () => {
+  const [visits, setVisits] = useState(0);
+
+  return (
+    <Router>
+      <div className="container">
+        <nav className="vertical-nav">
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+            <li>
+              <Link to="/contact">Contact</Link>
+            </li>
+          </ul>
+        </nav>
+
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<Home visits={visits} setVisits={setVisits} />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
+  );
+};
+
+export default App;
+```
+
+#### `src/App.css`
+
+```css
+/* Style the container to display nav and content side by side */
+.container {
+  display: flex;
+}
+
+.vertical-nav {
+  width: 200px; /* Set the width of the vertical menu */
+  padding: 20px; /* Add some padding */
+  background-color: #f4f4f4; /* Set a background color */
+}
+
+.vertical-nav ul {
+  list-style-type: none; /* Remove default list styling */
+  padding: 0; /* Remove default padding */
+}
+
+.vertical-nav ul li {
+  margin: 10px 0; /* Add some margin between the items */
+}
+
+.vertical-nav ul li a {
+  text-decoration: none; /* Remove underline from links */
+  color: #333; /* Set link color */
+  display: block; /* Make links block elements */
+  padding: 10px; /* Add padding to links */
+  border-radius: 4px; /* Round the corners */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.vertical-nav ul li a:hover {
+  background-color: #ddd; /* Change background color on hover */
+}
+
+.content {
+  flex-grow: 1; /* Take up the remaining space */
+  padding: 20px; /* Add some padding */
+}
+```
+
+#### `src/index.js`
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
+
+reportWebVitals();
+```
+
+## Deployment
+
+This application can be deployed to Netlify. Follow these steps:
+
+1. **Build the application:**
+
+   ```bash
+   npm run build
+   ```
+
+2. **Deploy the `build` folder to Netlify:**
+   - Go to [Netlify](https://www.netlify.com/).
+   - Log in or sign up for an account.
+   - Click on "New site from Git".
+   - Connect your Git repository and deploy the site.
+
+For more details, refer to the [Netlify documentation](https://docs.netlify.com/).
